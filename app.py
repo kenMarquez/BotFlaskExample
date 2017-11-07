@@ -59,15 +59,16 @@ def message_handler(event):
 
     response = requests.request("GET", url, headers=headers, params=querystring)
 
-    print(response.text)
-    print(response["object"])
+    data = json.loads(response.text)
+    print(data["entities"]["location"][0]["value"])
+
     # print(response["entities"][0]["value"].text)
     # Vemos si el mensaje es un texto o un adjunto (imagen, gif, sticker, etc)
     # We see if the message is a text or an attachment (image, GIF, sticker, etc)
     if event.is_text_message:
         # We get the message from the event variable and sent it back7
         # Obtenemos el mensaje de la variable event y se lo regresamos al usuario
-        page.send(sender_id, "Hey, you send me: {}".format(event.message_text))
+        page.send(sender_id, "Hey, porque quieres ir a {}".format(data["entities"]["location"][0]["value"]))
     elif event.is_attachment_message:
         page.send(sender_id, "Boo, you didn't send a text. ")
 
